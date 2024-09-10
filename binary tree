@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+struct Node* insertNode(struct Node* root, int data) {
+    if (root == NULL) {
+        root = createNode(data);
+    } else {
+        char direction;
+        printf("Insert %d to the left or right of %d? (l/r): ", data, root->data);
+        scanf(" %c", &direction);
+        if (direction == 'l') {
+            root->left = insertNode(root->left, data);
+        } else if (direction == 'r') {
+            root->right = insertNode(root->right, data);
+        } else {
+            printf("Invalid direction! Use 'l' for left and 'r' for right.\n");
+        }
+    }
+    return root;
+}
+void inorderTraversal(struct Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    inorderTraversal(root->left);
+    printf("%d ", root->data);
+    inorderTraversal(root->right);
+}
+int main() {
+    struct Node* root = NULL;
+    int n, data;
+    printf("Enter the number of nodes: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        printf("Enter data for node %d: ", i + 1);
+        scanf("%d", &data);
+        root = insertNode(root, data);
+    }
+    printf("In-order traversal of the binary tree: ");
+    inorderTraversal(root);
+    return 0;
+}
